@@ -1,0 +1,7 @@
+*.mp3
+*.avi
+*.egg-info
+*.pyc
+.DS_Store
+.cache
+.venv
