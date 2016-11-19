@@ -1,4 +1,5 @@
 mido
 pytest
+tox
 gevent
 pyfiglet
