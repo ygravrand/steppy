@@ -63,7 +63,7 @@ class RulesChain(object):
                 self.matched_rule_index = i
                 if i == len(self.rules) - 1:
                     # All rules have been matched
-                    func([rule.matched_message for rule in self.rules], matched_rules=self.rules)
+                    func([rule.matched_message for rule in self.rules], self.rules)
                     return True, False, ('*' * i) + '!'
                 return True, True, '*' * (i+1)
             else:

@@ -84,7 +84,7 @@ class Steps(object):
         self.steps_per_beat = steps_per_beat
         notes = [None] * step_count
         self.steps = [Step(note, i) for i, note in enumerate(notes)]
-        self.current_step_index = 0
+        self.current_step_index = -1
 
     @property
     def current_step(self):
@@ -134,13 +134,14 @@ class Steps(object):
         self.current_step_index = self.get_previous_step_index()
         if self.current_step_index == 0:
             print('#'*16)
+        print(self.current_step)
         return self.current_step
 
     def next_step(self):
         self.current_step_index = self.get_next_step_index()
-        print(self.current_step)
         if self.current_step_index == 0:
             print('#'*16)
+        print(self.current_step)
         return self.current_step
 
     def toggle_step(self, pos):
@@ -149,7 +150,7 @@ class Steps(object):
             if not step.on and step.note is None:
                 # Take the previous activated step's note
                 lst = self.steps[pos::-1] + self.steps[:pos:-1]
-                steps_on = [step for step in lst if step.on]
+                steps_on = [step_ for step_ in lst if step_.on]
                 if steps_on:
                     step.note = Note.from_note(steps_on[0].note)
             step.on = not step.on

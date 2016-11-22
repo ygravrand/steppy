@@ -30,8 +30,8 @@ class MiniNova(BaseController):
         # https://d19ulaff0trnck.cloudfront.net/sites/default/files/novation/downloads/9558/mininova-cc-nprn-chart_0.pdf
         self.register('TEMPO', self.on_tempo_change, msb_lsb_rules_chain(2, '*', 63, '*'))
         for i in range(0, 8):
-            self.register('ARPEG #%d on' % i, lambda msgs, i=i, **kw: self.on_arpeg(i, True), msb_lsb_rules_chain(60, msb_value=127, lsb=32+i))
-            self.register('ARPEG #%d off' % i, lambda msgs, i=i, **kw: self.on_arpeg(i, False), msb_lsb_rules_chain(60, msb_value=0, lsb=32+i))
+            self.register('ARPEG #%d on' % i, lambda msgs, rules, i=i: self.on_arpeg(i, True), msb_lsb_rules_chain(60, msb_value=127, lsb=32+i))
+            self.register('ARPEG #%d off' % i, lambda msgs, rules, i=i: self.on_arpeg(i, False), msb_lsb_rules_chain(60, msb_value=0, lsb=32+i))
 
         # The problem with 'LATCH' button is that it also modifies the synth's output...
         """
@@ -58,11 +58,11 @@ class MiniNova(BaseController):
             self.sequencer.output(self,
                                   *msb_lsb_output(60, 127 if steps.current_step == step else 0, 32 + i))
 
-    def on_note_on(self, msgs, **kw):
+    def on_note_on(self, msgs, rules):
         self.sequencer.note_pressed(Note(numeric_note=msgs[0].note,
                                          velocity=msgs[0].velocity))
 
-    def on_note_off(self, msgs, **kw):
+    def on_note_off(self, msgs, rules):
         self.sequencer.note_release()
 
     def on_pad_pressed(self, i):
@@ -72,10 +72,10 @@ class MiniNova(BaseController):
         print('>>>>>>>>>>> ARPEG %d %s' % (i, 'on' if on else 'off'))
         self.sequencer.toggle_step(i)
 
-    def on_tempo_change(self, msgs, **kw):
+    def on_tempo_change(self, msgs, rules):
         _, _, msb, lsb = [msg.value for msg in msgs]
         bpm = msb * 128 + lsb
         self.sequencer.set_tempo(bpm)
 
-    def on_cc(self, msgs, **kw):
+    def on_cc(self, msgs, rules):
         self.sequencer.set_step_cc(msgs[0].control, msgs[0].value)

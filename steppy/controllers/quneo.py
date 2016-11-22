@@ -46,10 +46,10 @@ class Quneo(BaseController):
         # ROWS
         for i in range(0,32):
             self.register('PAD PRESS: #%d' % (i+1),
-                          lambda msgs, i=i, **kw: self.handle_pad_press(msgs, i),
+                          lambda msgs, rules, i=i: self.handle_pad_press(msgs, i),
                           RulesChain(Rule(type_='note_on', note=78 - int(i/8) * 8 + (i%8))))
             self.register('PAD RELEASE: #%d' % (i+1),
-                          lambda msgs, i=i, **kw: self.handle_pad_release(msgs, i),
+                          lambda msgs, rules, i=i: self.handle_pad_release(msgs, i),
                           RulesChain(Rule(type_='note_on', note=78 - int(i/8) * 8 + (i%8))))
 
     @property

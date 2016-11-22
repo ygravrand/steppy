@@ -16,7 +16,14 @@ class BaseController(object):
         self.rules_chains = OrderedDict()
 
     def register(self, name, func, rules_chain):
-        """Register a function which will be called when the rules chain matches"""
+        """Register a function which will be called when the rules chain matches.
+        In:
+          - ``name`` -- A name for this registration
+          - ``func`` -- A callable which will be given as arguments:
+            - ``matched_messages`` -- The list of message having matched the rules chain
+            - ``matched_rules`` -- The list of rules in the rules chain
+          - ``rules_chain`` -- The rules chain
+        """
         self.rules_chains[name] = (func, rules_chain)
 
     def handle_message(self, msg):

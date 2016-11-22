@@ -55,21 +55,21 @@ class LaunchControl(BaseController):
 
         for i in range(0,9):
             self.register('ROTARIES: FIRST ROW #%d' % (i+1),
-                          lambda msgs, i=i, **kw: self.handle_rotaries_first_row(msgs, i),
+                          lambda msgs, rules, i=i: self.handle_rotaries_first_row(msgs, i),
                           RulesChain(Rule(type_='control_change', control=21+i)))
 
         for i in range(0,9):
             self.register('ROTARIES: SECOND ROW #%d' % (i+1),
-                          lambda msgs, i=i, **kw: self.handle_rotaries_second_row(msgs, i),
+                          lambda msgs, rules, i=i: self.handle_rotaries_second_row(msgs, i),
                           RulesChain(Rule(type_='control_change', control=41+i)))
 
         for i in range(0,9):
             note = (9+i) if i < 4 else (21+i)
             self.register('PAD PRESS: #%d' % (i+1),
-                          lambda msgs, i=i, **kw: self.handle_pad_press(msgs, i),
+                          lambda msgs, rules, i=i: self.handle_pad_press(msgs, i),
                           RulesChain(Rule(type_='note_on', channel=8, note=note)))
             self.register('PAD RELEASE: #%d' % (i+1),
-                          lambda msgs, i=i, **kw: self.handle_pad_release(msgs, i),
+                          lambda msgs, rules, i=i: self.handle_pad_release(msgs, i),
                           RulesChain(Rule(type_='note_off', channel=8, note=note)))
 
     def _output_led_sysex(self, template, led, value):

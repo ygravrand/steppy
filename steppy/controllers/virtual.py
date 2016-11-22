@@ -19,9 +19,9 @@ class Virtual(BaseController):
         self.register('NOTE OFF #1', self.on_note_off, RulesChain(Rule(type_='note_on', velocity=0)))
         self.register('NOTE OFF #2', self.on_note_off, RulesChain(Rule(type_='note_off')))
 
-    def on_note_on(self, msgs, **kw):
+    def on_note_on(self, msgs, rules):
         self.sequencer.note_pressed(Note(numeric_note=msgs[0].note,
                                          velocity=msgs[0].velocity))
 
-    def on_note_off(self, msgs, **kw):
+    def on_note_off(self, msgs, rules):
         self.sequencer.note_release()
