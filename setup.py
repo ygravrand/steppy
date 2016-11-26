@@ -10,8 +10,16 @@ setup(
     name='steppy',
     version='0.1.0',
     packages=find_packages(),
-    install_requires=['mido', 'gevent', 'pyfiglet'],
+    install_requires=['configobj', 'mido', 'gevent', 'pyfiglet'],
     extras_require={
         'test': ['pytest', 'tox']
+    },
+    entry_points={
+        'steppy.controllers': [
+            'launchcontrol = steppy.controllers.launchcontrol:LaunchControl',
+            'mininova = steppy.controllers.mininova:MiniNova',
+            'quneo = steppy.controllers.quneo:Quneo',
+            'virtual = steppy.controllers.virtual:Virtual'
+        ]
     }
 )

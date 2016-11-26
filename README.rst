@@ -45,7 +45,6 @@ To run tests:
 
 Roadmap
 =======
-- Configuration and entry points to activate controllers
 - Chords handling (especially important for a drum machine...)
 - Multi track
 - Load / save to midi

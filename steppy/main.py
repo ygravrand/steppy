@@ -7,6 +7,7 @@
 import argparse
 
 from steppy import steps_persister
+from steppy.config import Config
 from steppy.controllers import mininova, quneo, launchcontrol, virtual
 from steppy.inputs import Inputs
 from steppy.list_interfaces import list_interfaces
@@ -23,13 +24,10 @@ def main(fpath=None):
         steps_persister.load(steps, fpath)
     tempo = Tempo()
     seq = Sequencer(steps, tempo)
-    mini = mininova.MiniNova(seq)
-    qu = quneo.Quneo(seq)
-    lc = launchcontrol.LaunchControl(seq)
-    virt = virtual.Virtual(seq)
-    seq.add_input_controllers(mini, qu, lc)
-    seq.add_output_controllers(mini, qu, lc, virt)
-    seq.set_synths(mini, virt)
+    config = Config(seq)
+    seq.add_input_controllers(*config.inputs)
+    seq.add_output_controllers(*config.outputs)
+    seq.set_synths(*config.synths)
     seq.start()
 
 

@@ -12,7 +12,7 @@ from ..rules import RulesChain, Rule
 
 class Virtual(BaseController):
 
-    def __init__(self, sequencer, port_name='VirtualMidi Bus 1'):
+    def __init__(self, sequencer, port_name):
         super(Virtual, self).__init__(sequencer, port_name)
 
         self.register('NOTE ON', self.on_note_on, RulesChain(Rule(type_='note_on', velocity='!0')))
