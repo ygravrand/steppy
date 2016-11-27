@@ -40,6 +40,9 @@ class Config(object):
                                     __name__,
                                     os.path.join('..','conf', 'steppy.conf')
                                     )
+        else:
+            filepath = os.path.abspath(filepath)
+            print 'Using config file', filepath
         config = self.parse_config(filepath)
         self.controllers = self.get_controllers_from_config(sequencer, config)
         self.inputs = self.get_ios_from_config(config, 'inputs')
