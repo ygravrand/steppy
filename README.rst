@@ -1,6 +1,7 @@
 StepPy: a step sequencer in Python
 ==================================
 .. image:: https://travis-ci.org/ygravrand/steppy.svg?branch=master
+   :target: https://travis-ci.org/ygravrand/steppy
 
 
 Using this project, one can:
