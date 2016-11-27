@@ -26,7 +26,14 @@ This project was demonstrated @ Pycon-Fr 2016.
 The slides are available `here
 <https://speakerdeck.com/ygravrand/informatique-musicale-creer-un-sequenceur-pas-a-pas-avec-python>`_ (soon on this repository).
 
-I will soon post a demonstration video.
+First demo:
+
+.. image:: http://img.youtube.com/vi/j3N0pPi5eu4/0.jpg
+   :width: 320px
+   :height: 240px
+   :alt: "First StepPy demo"
+   :align: center
+   :target: https://youtu.be/j3N0pPi5eu4
 
 
 Installation and usage
