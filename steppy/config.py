@@ -42,7 +42,7 @@ class Config(object):
                                     )
         else:
             filepath = os.path.abspath(filepath)
-            print 'Using config file', filepath
+            print('Using config file %s' % filepath)
         config = self.parse_config(filepath)
         self.controllers = self.get_controllers_from_config(sequencer, config)
         self.inputs = self.get_ios_from_config(config, 'inputs')
@@ -76,7 +76,7 @@ class Config(object):
                     sequencer
                 )
             else:
-                print 'Unknown controller type: "%s". Please check "steppy.controllers" entry points' % cont_config['type']
+                print('Unknown controller type: "%s". Please check "steppy.controllers" entry points' % cont_config['type'])
         return controllers
 
     def instanciate_controller(self, controller_class, controller_config, sequencer):
@@ -92,5 +92,5 @@ class Config(object):
             if io in self.controllers:
                 res.append(self.controllers[io])
             else:
-                print 'Unknown %s type: "%s"' % (io_type, io)
+                print('Unknown %s type: "%s"' % (io_type, io))
         return res
