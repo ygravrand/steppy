@@ -78,16 +78,21 @@ class Sequencer(object):
         self.print_str('NEXT STEP ON  NOTE %s' % ('on' if on else 'off'))
         self._next_step_on_note = on
 
+    def print(self, msg):
+        gevent.idle()
+        print(msg)
+
     def print_str(self, msg):
+        gevent.idle()
         self.console.print_str(msg)
 
     def start(self):
         try:
             self.console.start()
-            print('Activating inputs')
+            self.print('Activating inputs')
             self.inputs.activate_inputs()
             self.set_event(SequencerEvents.START)
-            print('Starting scheduler')
+            self.print('Starting scheduler')
             self.scheduler.start()
         except KeyboardInterrupt:
             self.stop()

@@ -42,8 +42,8 @@ Installation and usage
 To install the package and run StepPy:
 
 - Install ``python``, ``virtualenv`` and make sure you have a C compiler, portmidi and python headers: e.g. ``sudo apt-get install python3 python3-virtualenv libpython3-dev libportmidi-dev build-essential`` on Debian/Ubuntu
-- Create a ``virtualenv``: ``virtualenv --python=python3 .venv; source .venv/bin/activate``
 - Clone this repository and ``cd`` into it
+- Create a ``virtualenv``: ``virtualenv --python=python3 .venv; source .venv/bin/activate``
 - Run ``pip install -e .`` or ``python setup.py develop``
 - Connect a supported controller on an USB port
 - Run ``python -m steppy.main`` or ``python -m steppy.main load examples/mozart.json``
@@ -64,6 +64,19 @@ Troubleshooting
     [[launchcontrol1]]
     type = launchcontrol
     port_name = Launch Control MIDI 1
+
+
+On the Raspberry Pi
+===================
+
+- Follow instructions at https://www.raspberrypi.org/downloads/raspbian to install Raspbian
+- Install ``git`` and Steppy dependencies: ``sudo apt-get install -y git python3 python3-virtualenv libpython3-dev libportmidi-dev build-essential``
+- Clone this repository: ``git clone https://github.com/ygravrand/steppy; cd steppy``
+- Create a ``virtualenv``: ``python3 -m virtualenv --python=python3 .venv; source .venv/bin/activate``
+- Run ``pip install -e .``
+- Connect a supported controller on an USB port
+- Run ``python -m steppy.main`` or ``python -m steppy.main load examples/mozart.json``
+
 
 Roadmap
 =======
