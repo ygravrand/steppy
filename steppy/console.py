@@ -13,14 +13,16 @@ class Console(object):
 
     configspec = {
         'console': {
-            'font': 'string(default="basic")',
-            'queue_size': 'integer(default=10)'
+            'font': 'string(default="basic")',      # pyfiglet font
+            'queue_size': 'integer(default=10)',    # discard messages when more than ``queue_size`` are left to print
+            'terse': 'boolean(default=False)'       # if True, print BIG messages only
         }
     }
 
     def __init__(self, config=None):
         self.font = config['console']['font'] if config else 'basic'
         self.queue = Queue(config['console']['queue_size'] if config else 10)
+        self.terse = config['console']['terse'] if config else False
         self._process = None
 
     def start(self):
@@ -40,4 +42,5 @@ class Console(object):
         self.queue.put((True, str(msg)))
 
     def print_(self, msg):
-        self.queue.put((False, str(msg)))
+        if not self.terse:
+            self.queue.put((False, str(msg)))

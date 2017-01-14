@@ -15,7 +15,8 @@ from steppy.controllers.mininova import MiniNova
 
 
 def get_mininova():
-    seq = Sequencer(Console(), Steps(), Tempo())
+    console = Console()
+    seq = Sequencer(console, Steps(console), Tempo())
     mini = MiniNova(seq)
     return mini
 

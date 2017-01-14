@@ -17,9 +17,6 @@ from steppy.tempo import Tempo
 
 
 def main(fpath=None, configfile=None):
-    steps = Steps()
-    if fpath is not None:
-        steps_persister.load(steps, fpath)
     tempo = Tempo()
 
     configurator = Configurator(configfile)
@@ -28,6 +25,10 @@ def main(fpath=None, configfile=None):
     config = configurator.configure()
 
     console = Console(config)
+    steps = Steps(console)
+    if fpath is not None:
+        steps_persister.load(steps, fpath)
+    
     seq = Sequencer(console, steps, tempo, ControllersConfig(config))
 
     seq.start()

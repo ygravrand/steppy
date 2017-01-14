@@ -15,7 +15,8 @@ from steppy.controllers.launchcontrol import LaunchControl
 
 
 def get_launchcontrol():
-    seq = Sequencer(Console(), Steps(), Tempo())
+    console = Console()
+    seq = Sequencer(console, Steps(console), Tempo())
     lc = LaunchControl(seq)
     return lc
 

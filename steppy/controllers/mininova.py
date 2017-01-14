@@ -16,8 +16,8 @@ from .base_controller import BaseController
 
 class MiniNova(BaseController):
 
-    def __init__(self, sequencer, port_name='MiniNova'):
-        super(MiniNova, self).__init__(sequencer, port_name)
+    def __init__(self, sequencer, console, port_name='MiniNova'):
+        super(MiniNova, self).__init__(sequencer, console, port_name)
 
         self.sequencer.on(SequencerEvents.STEP_BEGIN, self, self.on_step_begin)
         self.sequencer.on(SequencerEvents.STEP_END, self, self.on_step_end)
@@ -66,10 +66,10 @@ class MiniNova(BaseController):
         self.sequencer.note_release()
 
     def on_pad_pressed(self, i):
-        print('>>>>>>>>>>> PAD %d PRESSED' % i)
+        self.console.print_('>>>>>>>>>>> PAD %d PRESSED' % i)
 
     def on_arpeg(self, i, on):
-        print('>>>>>>>>>>> ARPEG %d %s' % (i, 'on' if on else 'off'))
+        self.console.print_('>>>>>>>>>>> ARPEG %d %s' % (i, 'on' if on else 'off'))
         self.sequencer.toggle_step(i)
 
     def on_tempo_change(self, msgs, rules):

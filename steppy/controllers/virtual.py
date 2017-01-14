@@ -12,8 +12,8 @@ from .base_controller import BaseController
 
 class Virtual(BaseController):
 
-    def __init__(self, sequencer, port_name):
-        super(Virtual, self).__init__(sequencer, port_name)
+    def __init__(self, sequencer, console, port_name):
+        super(Virtual, self).__init__(sequencer, console, port_name)
 
         self.register('NOTE ON', self.on_note_on, RulesChain(Rule(type_='note_on', velocity='!0')))
         self.register('NOTE OFF #1', self.on_note_off, RulesChain(Rule(type_='note_on', velocity=0)))

@@ -31,7 +31,7 @@ class Sequencer(object):
         self.synths = []
         self.current_synth_index = None
         self.events = SequencerEvents()
-        self.scheduler = Scheduler(self, steps, tempo)
+        self.scheduler = Scheduler(self, console, steps, tempo)
         self.paused = False
         self._next_step_on_note = False
         self._saved_note = None  # The note currently played by the user

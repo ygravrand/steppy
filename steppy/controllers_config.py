@@ -58,7 +58,7 @@ class ControllersConfig(object):
             args = (controller_config['port_name'],)
         else:
             args = ()
-        return controller_class(sequencer, *args)
+        return controller_class(sequencer, sequencer.console, *args)
 
     def _get_ios(self, controllers, io_type):
         res = []

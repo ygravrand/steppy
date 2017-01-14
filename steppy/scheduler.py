@@ -27,8 +27,9 @@ class SchedulerEvents(object):
 
 class Scheduler(object):
 
-    def __init__(self, sequencer, steps, tempo):
+    def __init__(self, sequencer, console, steps, tempo):
         self.sequencer = sequencer
+        self.console = console
         self.steps = steps
         self.tempo = tempo
         self.paused = False
@@ -61,7 +62,7 @@ class Scheduler(object):
     def start(self):
         # print('*** Registering signal handlers ***')
         # self._register_signal_handlers()
-        print('*** Starting note scheduler ***')
+        self.console.print_('*** Starting note scheduler ***')
         self.note_scheduler.start()
         self._target_time = self._initial_time = time.time()
         g = gevent.Greenlet(self._gevent_loop)
@@ -71,7 +72,7 @@ class Scheduler(object):
     ####
 
     def _gevent_loop(self):
-        print('** Scheduler: loop begin **')
+        self.console.print_('** Scheduler: loop begin **')
         self.sequencer.clock_start()
         while True:
             while self.paused:
@@ -101,10 +102,10 @@ class Scheduler(object):
 
     def on_resume(self):
         if self.paused:
-            print('[Scheduler] Resuming...')
+            self.console.print_('[Scheduler] Resuming...')
             self.paused = False
 
     def on_pause(self):
         if not self.paused:
-            print('[Scheduler] Pausing...')
+            self.console.print_('[Scheduler] Pausing...')
             self.paused = True

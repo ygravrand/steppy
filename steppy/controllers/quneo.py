@@ -18,8 +18,8 @@ class Quneo(BaseController):
     GREEN = 0
     RED = 1
 
-    def __init__(self, sequencer, port_name='QUNEO'):
-        super(Quneo, self).__init__(sequencer, port_name)
+    def __init__(self, sequencer, console, port_name='QUNEO'):
+        super(Quneo, self).__init__(sequencer, console, port_name)
 
         self.sequencer.on(SequencerEvents.STEP_BEGIN, self, self.on_step_begin)
         self.sequencer.on(SequencerEvents.STEP_END, self, self.on_step_end)

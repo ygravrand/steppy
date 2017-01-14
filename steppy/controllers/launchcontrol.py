@@ -28,8 +28,8 @@ class LaunchControl(BaseController):
     GREEN_LOW = 28
     GREEN_HIGH = 60
 
-    def __init__(self, sequencer, port_name='Launch Control'):
-        super(LaunchControl, self).__init__(sequencer, port_name)
+    def __init__(self, sequencer, console, port_name='Launch Control'):
+        super(LaunchControl, self).__init__(sequencer, console, port_name)
 
         self.sequencer.on(SequencerEvents.STEP_BEGIN, self, self.on_step_begin)
         self.sequencer.on(SequencerEvents.STEP_END, self, self.on_step_end)
