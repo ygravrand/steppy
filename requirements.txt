@@ -2,5 +2,6 @@ configobj
 mido
 pytest
 tox
+flake8
 gevent
 pyfiglet

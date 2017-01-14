@@ -39,7 +39,7 @@ class Sequencer(object):
             controllers_config.init_controllers(self)
             self.inputs.add_controllers(*controllers_config.inputs)
             self.outputs.add_controllers(*controllers_config.outputs)
-            self.set_synths(controllers_config.synths)
+            self.set_synths(*controllers_config.synths)
 
     def set_synths(self, *controllers):
         self.synths = controllers
@@ -47,7 +47,9 @@ class Sequencer(object):
             self.current_synth_index = 0
 
     def output(self, controller, *messages):
-        assert isinstance(controller, BaseController), '``output`` first argument must be a controller'
+        assert isinstance(controller, BaseController), \
+            '``output`` first argument must be a controller (found %s)' % \
+            (controller.__class__.__name__ if controller else 'None')
         self.outputs.send(controller, *messages)
 
     def on(self, event, controller, fun):

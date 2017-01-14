@@ -67,4 +67,5 @@ class ControllersConfig(object):
                 res.append(controllers[io])
             else:
                 print('Unknown %s type: "%s"' % (io_type, io))
+        print(io_type, ':', res)
         return res

@@ -5,6 +5,7 @@
     :license: BSD, see LICENSE for more details.
 """
 
+
 class Console(object):
 
     def __init__(self, config=None):

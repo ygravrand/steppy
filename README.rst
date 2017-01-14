@@ -75,7 +75,7 @@ On the Raspberry Pi
 - Create a ``virtualenv``: ``python3 -m virtualenv --python=python3 .venv; source .venv/bin/activate``
 - Run ``pip install -e .``
 - Connect a supported controller on an USB port
-- Run ``python -m steppy.main`` or ``python -m steppy.main load examples/mozart.json``
+- Run ``python -m steppy.main --config=conf/steppy-rpi.conf`` or ``python -m steppy.main --config=conf/steppy-rpi.conf load examples/mozart.json``
 
 
 Roadmap
