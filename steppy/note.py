@@ -22,10 +22,10 @@ class Note(object):
 
     def __repr__(self):
         return '%s (%s) - %.2f [%s] (%s)' % (self.as_text,
-                              self.note,
-                              self.duration,
-                              self.velocity,
-                              self.channel)
+                                             self.note,
+                                             self.duration,
+                                             self.velocity,
+                                             self.channel)
 
     def parse_note(self, note):
         if not note:

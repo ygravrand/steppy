@@ -7,14 +7,12 @@
 
 import gevent
 
-from gevent import monkey; monkey.patch_all()
+from gevent import monkey; monkey.patch_all()  # noqa: E702
 from mido import Message
 
-from . import console, steps_persister
+from . import steps_persister
 from .controllers.base_controller import BaseController
-from .console import Console
 from .inputs import Inputs
-from .note import Note
 from .outputs import Outputs
 from .scheduler import Scheduler
 from .sequencer_events import SequencerEvents
@@ -26,7 +24,7 @@ class Sequencer(object):
         self.console = console
         self.steps = steps
         self.tempo = tempo
-        self.inputs =  Inputs()
+        self.inputs = Inputs()
         self.outputs = Outputs()
         self.synths = []
         self.current_synth_index = None
@@ -139,7 +137,7 @@ class Sequencer(object):
     def end_step(self, step):
         # If saved note was played for 'too long', force its end
         if self._saved_note and \
-            self._saved_note.duration > self.tempo.get_step_duration(self.steps.steps_per_beat):
+           self._saved_note.duration > self.tempo.get_step_duration(self.steps.steps_per_beat):
             self.note_release(True)
         if not self.paused:
             self.set_event(SequencerEvents.STEP_END, step)

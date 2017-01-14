@@ -5,8 +5,6 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from mido import Message
-
 from ..note import Note
 from ..rules import RulesChain, Rule
 from ..helpers import msb_lsb_output, msb_lsb_rules_chain
@@ -30,8 +28,8 @@ class MiniNova(BaseController):
         # https://d19ulaff0trnck.cloudfront.net/sites/default/files/novation/downloads/9558/mininova-cc-nprn-chart_0.pdf
         self.register('TEMPO', self.on_tempo_change, msb_lsb_rules_chain(2, '*', 63, '*'))
         for i in range(0, 8):
-            self.register('ARPEG #%d on' % i, lambda msgs, rules, i=i: self.on_arpeg(i, True), msb_lsb_rules_chain(60, msb_value=127, lsb=32+i))
-            self.register('ARPEG #%d off' % i, lambda msgs, rules, i=i: self.on_arpeg(i, False), msb_lsb_rules_chain(60, msb_value=0, lsb=32+i))
+            self.register('ARPEG #%d on' % i, lambda msgs, rules, i=i: self.on_arpeg(i, True), msb_lsb_rules_chain(60, msb_value=127, lsb=32 + i))
+            self.register('ARPEG #%d off' % i, lambda msgs, rules, i=i: self.on_arpeg(i, False), msb_lsb_rules_chain(60, msb_value=0, lsb=32 + i))
 
         # The problem with 'LATCH' button is that it also modifies the synth's output...
         """

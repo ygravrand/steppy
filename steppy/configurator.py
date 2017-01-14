@@ -16,12 +16,12 @@ class Configurator(object):
 
     spec = {}
 
-    def __init__(self, sequencer, filepath=None):
+    def __init__(self, filepath=None):
         if filepath is None:
             filepath = pkg_resources.resource_stream(
-                                    __name__,
-                                    os.path.join('..','conf', 'steppy.conf')
-                                    )
+                __name__,
+                os.path.join('..', 'conf', 'steppy.conf')
+            )
         else:
             filepath = os.path.abspath(filepath)
             print('Using config file %s' % filepath)

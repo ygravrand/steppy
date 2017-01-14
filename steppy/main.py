@@ -28,7 +28,7 @@ def main(fpath=None, configfile=None):
     steps = Steps(console)
     if fpath is not None:
         steps_persister.load(steps, fpath)
-    
+
     seq = Sequencer(console, steps, tempo, ControllersConfig(config))
 
     seq.start()

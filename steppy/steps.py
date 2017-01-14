@@ -105,8 +105,9 @@ class Steps(object):
         return int(self.current_step_index / steps_per_row)
 
     def increase_step_count(self):
-        self.steps[len(self.steps):len(self.steps)*2] = [Step(Note.from_note(step.note), i+len(self.steps))
-                for i, step in enumerate(self.steps)]
+        self.steps[len(self.steps):len(self.steps) * 2] = \
+            [Step(Note.from_note(step.note), i + len(self.steps))
+             for i, step in enumerate(self.steps)]
         self.console.print_(self.steps)
 
     def clear(self):
@@ -134,14 +135,14 @@ class Steps(object):
     def prev_step(self):
         self.current_step_index = self.get_previous_step_index()
         if self.current_step_index == 0:
-            self.console.print_('#'*16)
+            self.console.print_('#' * 16)
         self.console.print_(self.current_step)
         return self.current_step
 
     def next_step(self):
         self.current_step_index = self.get_next_step_index()
         if self.current_step_index == 0:
-            self.console.print_('#'*16)
+            self.console.print_('#' * 16)
         self.console.print_(self.current_step)
         return self.current_step
 
@@ -163,5 +164,5 @@ class Steps(object):
     def get_current_step_str(self, pos=None):
         step = self.get_step(pos)
         return '%d : %s %s' % (step.pos + 1,
-                              step.note.as_text if step.note else '--',
-                              ('(%.2f)' % step.duration) if step.duration else '')
+                               step.note.as_text if step.note else '--',
+                               ('(%.2f)' % step.duration) if step.duration else '')

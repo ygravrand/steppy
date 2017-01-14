@@ -7,17 +7,17 @@
 
 from mido import Message
 
-from steppy.console import Console
 from steppy.steps import Steps
 from steppy.sequencer import Sequencer
 from steppy.tempo import Tempo
 from steppy.controllers.mininova import MiniNova
 
+from .console import Console
 
 def get_mininova():
     console = Console()
     seq = Sequencer(console, Steps(console), Tempo())
-    mini = MiniNova(seq)
+    mini = MiniNova(seq, console)
     return mini
 
 

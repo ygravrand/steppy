@@ -6,10 +6,7 @@
 """
 
 import gevent
-import signal
-import sys
 import time
-import traceback
 
 from gevent import queue
 
@@ -38,11 +35,7 @@ class Scheduler(object):
         self._target_time = None
         self._iteration = 0
 
-    #def get_next_step_start_abs_time(self, step):
-    #    now = t.time()
-    #    return now + self.tempo.get_step_duration(self.steps.steps_per_beat)
-
-    ##### PUBLIC API
+    # ---- PUBLIC API
 
     def schedule_note(self, step=None):
         self.note_scheduler.schedule_note(step or self.steps.current_step)
@@ -56,8 +49,8 @@ class Scheduler(object):
     def end_step(self, step):
         self.on_step_end()
 
-    #def stop(self):
-    #    self.control_queue.put((SchedulerEvents.STOP,))
+    # def stop(self):
+    #     self.control_queue.put((SchedulerEvents.STOP,))
 
     def start(self):
         # print('*** Registering signal handlers ***')
@@ -68,8 +61,6 @@ class Scheduler(object):
         g = gevent.Greenlet(self._gevent_loop)
         g.start()
         g.join()
-
-    ####
 
     def _gevent_loop(self):
         self.console.print_('** Scheduler: loop begin **')

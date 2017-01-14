@@ -5,7 +5,7 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from controllers import discover_controllers
+from .controllers import discover_controllers
 
 
 class ControllersConfig(object):
@@ -23,7 +23,7 @@ class ControllersConfig(object):
                     'type': 'string',
                     'port_name': 'string(default=None)'
                 }
-            },
+        },
         'io': {
             'inputs': 'list(default=list())',
             'outputs': 'list(default=list())',

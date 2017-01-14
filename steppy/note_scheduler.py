@@ -33,12 +33,11 @@ class NoteScheduler(object):
         while True:
             self._execute_command()
 
-
     def _get_note_end_abs_time(self, step):
         now = self._loop.time()
         return now + self.tempo.get_note_duration(self.steps.steps_per_beat, step)
 
-    ##### PUBLIC API - will be called from other threads
+    # ---- PUBLIC API - will be called from other threads
 
     def schedule_note(self, step):
         if step.on:

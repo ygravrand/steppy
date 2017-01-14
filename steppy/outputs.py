@@ -5,8 +5,6 @@
     :license: BSD, see LICENSE for more details.
 """
 
-import mido
-
 from .output import Output
 
 
