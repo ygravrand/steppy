@@ -5,9 +5,9 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from ..base_controller import BaseController
 from ..note import Note
 from ..rules import RulesChain, Rule
+from .base_controller import BaseController
 
 
 class Virtual(BaseController):

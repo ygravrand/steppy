@@ -9,9 +9,9 @@ from mido import Message
 
 from ..note import Note
 from ..rules import RulesChain, Rule
-from ..base_controller import BaseController
 from ..helpers import msb_lsb_output, msb_lsb_rules_chain
 from ..sequencer_events import SequencerEvents
+from .base_controller import BaseController
 
 
 class MiniNova(BaseController):

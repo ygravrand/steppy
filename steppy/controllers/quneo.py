@@ -5,10 +5,10 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from ..base_controller import BaseController
 from ..note import Note
 from ..rules import Rule, RulesChain
 from ..sequencer_events import SequencerEvents
+from .base_controller import BaseController
 
 
 class Quneo(BaseController):
@@ -152,7 +152,7 @@ class Quneo(BaseController):
         self.sequencer.output(self, *self._leds_msgs(i, False, self.GREEN))
         step = self.sequencer.toggle_step(i)
         if step:
-            self.sequencer.print_str('%d : %s' % (i+1, 'on' if step.on else 'off'))
+            self.sequencer.big_print('%d : %s' % (i+1, 'on' if step.on else 'off'))
 
     def handle_increase_step_count(self, *args, **kw):
         self.sequencer.increase_step_count()

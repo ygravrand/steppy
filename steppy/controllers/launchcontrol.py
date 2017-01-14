@@ -8,10 +8,10 @@
 from mido import Message
 
 from .. import console
-from ..base_controller import BaseController
 from ..note import Note
 from ..rules import Rule, RulesChain
 from ..sequencer_events import SequencerEvents
+from .base_controller import BaseController
 
 
 class LaunchControl(BaseController):

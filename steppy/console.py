@@ -4,7 +4,6 @@
     :copyright: (c) 2016 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
-
 import pyfiglet
 
 from multiprocessing import Process, Queue
@@ -12,8 +11,16 @@ from multiprocessing import Process, Queue
 
 class Console(object):
 
-    def __init__(self, max_queue_size=1000):
-        self.queue = Queue(max_queue_size)
+    configspec = {
+        'console': {
+            'font': 'string(default="basic")',
+            'queue_size': 'integer(default=10)'
+        }
+    }
+
+    def __init__(self, config=None):
+        self.font = config['console']['font'] if config else 'basic'
+        self.queue = Queue(config['console']['queue_size'] if config else 10)
         self._process = None
 
     def start(self):
@@ -23,8 +30,14 @@ class Console(object):
 
     def _start(self):
         while True:
-            msg = self.queue.get()
-            pyfiglet.print_figlet(msg, 'basic')
+            big, msg = self.queue.get()
+            if big:
+                pyfiglet.print_figlet(msg, self.font)
+            else:
+                print(msg)
 
-    def print_str(self, msg):
-        self.queue.put(str(msg))
+    def big_print(self, msg):
+        self.queue.put((True, str(msg)))
+
+    def print_(self, msg):
+        self.queue.put((False, str(msg)))

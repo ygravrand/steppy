@@ -7,6 +7,7 @@
 
 from mido import Message
 
+from steppy.console import Console
 from steppy.steps import Steps
 from steppy.sequencer import Sequencer
 from steppy.tempo import Tempo
@@ -14,9 +15,7 @@ from steppy.controllers.launchcontrol import LaunchControl
 
 
 def get_launchcontrol():
-    steps = Steps()
-    tempo = Tempo()
-    seq = Sequencer(steps, tempo)
+    seq = Sequencer(Console(), Steps(), Tempo())
     lc = LaunchControl(seq)
     return lc
 
