@@ -5,6 +5,7 @@
     :license: BSD, see LICENSE for more details.
 """
 import pyfiglet
+import queue
 
 from multiprocessing import Process, Queue
 
@@ -39,8 +40,14 @@ class Console(object):
                 print(msg)
 
     def big_print(self, msg):
-        self.queue.put((True, str(msg)))
+        try:
+            self.queue.put((True, str(msg)), False)
+        except queue.Full:
+            pass
 
     def print_(self, msg):
         if not self.terse:
-            self.queue.put((False, str(msg)))
+            try:
+                self.queue.put((False, str(msg)), False)
+            except queue.Full:
+                pass
