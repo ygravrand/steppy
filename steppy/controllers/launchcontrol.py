@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
 from mido import Message
 
-from .. import console
-from ..base_controller import BaseController
-from ..note import Note
 from ..rules import Rule, RulesChain
 from ..sequencer_events import SequencerEvents
+from .base_controller import BaseController
 
 
 class LaunchControl(BaseController):
@@ -28,8 +26,8 @@ class LaunchControl(BaseController):
     GREEN_LOW = 28
     GREEN_HIGH = 60
 
-    def __init__(self, sequencer, port_name='Launch Control'):
-        super(LaunchControl, self).__init__(sequencer, port_name)
+    def __init__(self, sequencer, console, port_name='Launch Control'):
+        super(LaunchControl, self).__init__(sequencer, console, port_name)
 
         self.sequencer.on(SequencerEvents.STEP_BEGIN, self, self.on_step_begin)
         self.sequencer.on(SequencerEvents.STEP_END, self, self.on_step_end)
@@ -53,22 +51,22 @@ class LaunchControl(BaseController):
         self.register('BUT UP RIGHT', self.handle_upper_right_button,
                       RulesChain(Rule(type_='control_change', control=115, value=0)))
 
-        for i in range(0,9):
-            self.register('ROTARIES: FIRST ROW #%d' % (i+1),
+        for i in range(0, 9):
+            self.register('ROTARIES: FIRST ROW #%d' % (i + 1),
                           lambda msgs, rules, i=i: self.handle_rotaries_first_row(msgs, i),
-                          RulesChain(Rule(type_='control_change', control=21+i)))
+                          RulesChain(Rule(type_='control_change', control=21 + i)))
 
-        for i in range(0,9):
-            self.register('ROTARIES: SECOND ROW #%d' % (i+1),
+        for i in range(0, 9):
+            self.register('ROTARIES: SECOND ROW #%d' % (i + 1),
                           lambda msgs, rules, i=i: self.handle_rotaries_second_row(msgs, i),
-                          RulesChain(Rule(type_='control_change', control=41+i)))
+                          RulesChain(Rule(type_='control_change', control=41 + i)))
 
-        for i in range(0,9):
-            note = (9+i) if i < 4 else (21+i)
-            self.register('PAD PRESS: #%d' % (i+1),
+        for i in range(0, 9):
+            note = (9 + i) if i < 4 else (21 + i)
+            self.register('PAD PRESS: #%d' % (i + 1),
                           lambda msgs, rules, i=i: self.handle_pad_press(msgs, i),
                           RulesChain(Rule(type_='note_on', channel=8, note=note)))
-            self.register('PAD RELEASE: #%d' % (i+1),
+            self.register('PAD RELEASE: #%d' % (i + 1),
                           lambda msgs, rules, i=i: self.handle_pad_release(msgs, i),
                           RulesChain(Rule(type_='note_off', channel=8, note=note)))
 
@@ -105,7 +103,7 @@ class LaunchControl(BaseController):
         current_step = steps.current_step
         # Take the 8 next steps closest to the current step
         steps_start = 8 * int(current_step.pos / 8)
-        for i, step in enumerate(steps.steps[steps_start:steps_start+8]):
+        for i, step in enumerate(steps.steps[steps_start:steps_start + 8]):
             if step.on:
                 if self.sequencer.next_step_on_note:
                     color = self.GREEN_LOW if step != current_step else self.GREEN_HIGH
@@ -115,7 +113,7 @@ class LaunchControl(BaseController):
                 color = self.AMBER_LOW if step != current_step else self.AMBER_HIGH
             self._output_led_sysex(self.FACTORY_TPL, i, color)
 
-        pause_color = self.GREEN_HIGH if self.sequencer.next_step_on_note else self.RED_HIGH
+        # pause_color = self.GREEN_HIGH if self.sequencer.next_step_on_note else self.RED_HIGH
         self._output_led_button_sysex(self.FACTORY_TPL, 2, True)
         self._output_led_button_sysex(self.FACTORY_TPL, 3, False)
 
@@ -171,4 +169,4 @@ class LaunchControl(BaseController):
 
     def handle_play_button(self, *args, **kw):
         pass
-        #self.sequencer.set_transpose_mode()
+        # self.sequencer.set_transpose_mode()

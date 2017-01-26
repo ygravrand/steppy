@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -22,10 +22,10 @@ class Note(object):
 
     def __repr__(self):
         return '%s (%s) - %.2f [%s] (%s)' % (self.as_text,
-                              self.note,
-                              self.duration,
-                              self.velocity,
-                              self.channel)
+                                             self.note,
+                                             self.duration,
+                                             self.velocity,
+                                             self.channel)
 
     def parse_note(self, note):
         if not note:

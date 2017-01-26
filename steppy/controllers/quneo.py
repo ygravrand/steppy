@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
-from ..base_controller import BaseController
 from ..note import Note
 from ..rules import Rule, RulesChain
 from ..sequencer_events import SequencerEvents
+from .base_controller import BaseController
 
 
 class Quneo(BaseController):
@@ -18,8 +18,8 @@ class Quneo(BaseController):
     GREEN = 0
     RED = 1
 
-    def __init__(self, sequencer, port_name='QUNEO'):
-        super(Quneo, self).__init__(sequencer, port_name)
+    def __init__(self, sequencer, console, port_name='QUNEO'):
+        super(Quneo, self).__init__(sequencer, console, port_name)
 
         self.sequencer.on(SequencerEvents.STEP_BEGIN, self, self.on_step_begin)
         self.sequencer.on(SequencerEvents.STEP_END, self, self.on_step_end)
@@ -44,13 +44,13 @@ class Quneo(BaseController):
                       RulesChain(Rule(type_='note_off', note=36)))
 
         # ROWS
-        for i in range(0,32):
-            self.register('PAD PRESS: #%d' % (i+1),
+        for i in range(0, 32):
+            self.register('PAD PRESS: #%d' % (i + 1),
                           lambda msgs, rules, i=i: self.handle_pad_press(msgs, i),
-                          RulesChain(Rule(type_='note_on', note=78 - int(i/8) * 8 + (i%8))))
-            self.register('PAD RELEASE: #%d' % (i+1),
+                          RulesChain(Rule(type_='note_on', note=78 - int(i / 8) * 8 + (i % 8))))
+            self.register('PAD RELEASE: #%d' % (i + 1),
                           lambda msgs, rules, i=i: self.handle_pad_release(msgs, i),
-                          RulesChain(Rule(type_='note_on', note=78 - int(i/8) * 8 + (i%8))))
+                          RulesChain(Rule(type_='note_on', note=78 - int(i / 8) * 8 + (i % 8))))
 
     @property
     def _play_msgs(self):
@@ -81,11 +81,11 @@ class Quneo(BaseController):
             rows = (4,)
         else:
             rows = (3,)
-        return [getattr(Note(numeric_note=16*(i+1) + 2*(pos % 8) + color,
+        return [getattr(Note(numeric_note=16 * (i + 1) + 2 * (pos % 8) + color,
                              channel=1,
                              velocity=intensity),
-                        'start_message' if on else 'end_message') \
-                     for i in rows]
+                        'start_message' if on else 'end_message')
+                for i in rows]
 
     def on_start(self):
         # Init leds
@@ -120,7 +120,6 @@ class Quneo(BaseController):
     def on_step_end(self, step):
         self.sequencer.output(self, *self._leds_msgs(step.pos, False))
 
-
     def _reinit_leds(self, steps):
         current_step = steps.current_step
         if self.sequencer.next_step_on_note:
@@ -152,7 +151,7 @@ class Quneo(BaseController):
         self.sequencer.output(self, *self._leds_msgs(i, False, self.GREEN))
         step = self.sequencer.toggle_step(i)
         if step:
-            self.sequencer.print_str('%d : %s' % (i+1, 'on' if step.on else 'off'))
+            self.sequencer.big_print('%d : %s' % (i + 1, 'on' if step.on else 'off'))
 
     def handle_increase_step_count(self, *args, **kw):
         self.sequencer.increase_step_count()

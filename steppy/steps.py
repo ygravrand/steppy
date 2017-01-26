@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -80,7 +80,8 @@ class Step(object):
 
 class Steps(object):
 
-    def __init__(self, step_count=8, steps_per_beat=4):
+    def __init__(self, console, step_count=8, steps_per_beat=4):
+        self.console = console
         self.steps_per_beat = steps_per_beat
         notes = [None] * step_count
         self.steps = [Step(note, i) for i, note in enumerate(notes)]
@@ -104,9 +105,10 @@ class Steps(object):
         return int(self.current_step_index / steps_per_row)
 
     def increase_step_count(self):
-        self.steps[len(self.steps):len(self.steps)*2] = [Step(Note.from_note(step.note), i+len(self.steps))
-                for i, step in enumerate(self.steps)]
-        print(self.steps)
+        self.steps[len(self.steps):len(self.steps) * 2] = \
+            [Step(Note.from_note(step.note), i + len(self.steps))
+             for i, step in enumerate(self.steps)]
+        self.console.print_(self.steps)
 
     def clear(self):
         for step in self.steps:
@@ -133,15 +135,15 @@ class Steps(object):
     def prev_step(self):
         self.current_step_index = self.get_previous_step_index()
         if self.current_step_index == 0:
-            print('#'*16)
-        print(self.current_step)
+            self.console.print_('#' * 16)
+        self.console.print_(self.current_step)
         return self.current_step
 
     def next_step(self):
         self.current_step_index = self.get_next_step_index()
         if self.current_step_index == 0:
-            print('#'*16)
-        print(self.current_step)
+            self.console.print_('#' * 16)
+        self.console.print_(self.current_step)
         return self.current_step
 
     def toggle_step(self, pos):
@@ -162,5 +164,5 @@ class Steps(object):
     def get_current_step_str(self, pos=None):
         step = self.get_step(pos)
         return '%d : %s %s' % (step.pos + 1,
-                              step.note.as_text if step.note else '--',
-                              ('(%.2f)' % step.duration) if step.duration else '')
+                               step.note.as_text if step.note else '--',
+                               ('(%.2f)' % step.duration) if step.duration else '')

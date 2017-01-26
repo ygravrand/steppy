@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -16,7 +16,7 @@ class Inputs(object):
 
     def __init__(self, *controllers):
         self.inputs = [Input(controller) for controller in controllers]
-        self.input_by_interface = {input_.interface: input_ for \
+        self.input_by_interface = {input_.interface: input_ for
                                    input_ in self.inputs}
 
     def add_controllers(self, *controllers):
@@ -34,7 +34,7 @@ class Inputs(object):
 
     def receive(self):
         """Receive from all inputs of all controllers"""
-        for interface, msg in mido.ports.multi_receive([input_.interface \
+        for interface, msg in mido.ports.multi_receive([input_.interface
                                                         for input_ in self.inputs
                                                         if input_.interface is not None],
                                                        yield_ports=True):

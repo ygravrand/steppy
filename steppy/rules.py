@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
+
 
 class Rule(object):
 
@@ -19,9 +20,9 @@ class Rule(object):
             # print('%s -- %s -- %s' % (name, val, expected_value))
             if val is not None:
                 if expected_value in ('*', val) or \
-                   (isinstance(expected_value, str) and \
-                    expected_value.startswith('!') and \
-                    expected_value[1:] != str(val)):
+                    (isinstance(expected_value, str) and
+                     expected_value.startswith('!') and
+                     expected_value[1:] != str(val)):
                     matched += 1
             else:
                 pass  # print('msg.%s does not exist' % name)
@@ -65,7 +66,7 @@ class RulesChain(object):
                     # All rules have been matched
                     func([rule.matched_message for rule in self.rules], self.rules)
                     return True, False, ('*' * i) + '!'
-                return True, True, '*' * (i+1)
+                return True, True, '*' * (i + 1)
             else:
                 # No more match
                 break

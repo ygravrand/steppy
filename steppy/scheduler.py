@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
 import gevent
-import signal
-import sys
 import time
-import traceback
 
 from gevent import queue
 
@@ -27,8 +24,9 @@ class SchedulerEvents(object):
 
 class Scheduler(object):
 
-    def __init__(self, sequencer, steps, tempo):
+    def __init__(self, sequencer, console, steps, tempo):
         self.sequencer = sequencer
+        self.console = console
         self.steps = steps
         self.tempo = tempo
         self.paused = False
@@ -37,11 +35,7 @@ class Scheduler(object):
         self._target_time = None
         self._iteration = 0
 
-    #def get_next_step_start_abs_time(self, step):
-    #    now = t.time()
-    #    return now + self.tempo.get_step_duration(self.steps.steps_per_beat)
-
-    ##### PUBLIC API
+    # ---- PUBLIC API
 
     def schedule_note(self, step=None):
         self.note_scheduler.schedule_note(step or self.steps.current_step)
@@ -55,23 +49,21 @@ class Scheduler(object):
     def end_step(self, step):
         self.on_step_end()
 
-    #def stop(self):
-    #    self.control_queue.put((SchedulerEvents.STOP,))
+    # def stop(self):
+    #     self.control_queue.put((SchedulerEvents.STOP,))
 
     def start(self):
         # print('*** Registering signal handlers ***')
         # self._register_signal_handlers()
-        print('*** Starting note scheduler ***')
+        self.console.print_('*** Starting note scheduler ***')
         self.note_scheduler.start()
         self._target_time = self._initial_time = time.time()
         g = gevent.Greenlet(self._gevent_loop)
         g.start()
         g.join()
 
-    ####
-
     def _gevent_loop(self):
-        print('** Scheduler: loop begin **')
+        self.console.print_('** Scheduler: loop begin **')
         self.sequencer.clock_start()
         while True:
             while self.paused:
@@ -101,10 +93,10 @@ class Scheduler(object):
 
     def on_resume(self):
         if self.paused:
-            print('[Scheduler] Resuming...')
+            self.console.print_('[Scheduler] Resuming...')
             self.paused = False
 
     def on_pause(self):
         if not self.paused:
-            print('[Scheduler] Pausing...')
+            self.console.print_('[Scheduler] Pausing...')
             self.paused = True

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -29,7 +29,7 @@ class SequencerEvents(object):
             if controller in enabled_controllers:
                 try:
                     fun(*args)
-                except Exception as e:
+                except Exception:
                     print('Exception calling listener "%s" with arguments "%s"' %
                           (fun, args))
                     traceback.print_exc()

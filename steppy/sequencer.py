@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
 import gevent
 
-from gevent import monkey; monkey.patch_all()
+from gevent import monkey; monkey.patch_all()  # noqa: E702
 from mido import Message
 
-from . import console, steps_persister
-from .base_controller import BaseController
-from .console import Console
+from . import steps_persister
+from .controllers.base_controller import BaseController
 from .inputs import Inputs
-from .note import Note
 from .outputs import Outputs
 from .scheduler import Scheduler
 from .sequencer_events import SequencerEvents
@@ -22,26 +20,26 @@ from .sequencer_events import SequencerEvents
 
 class Sequencer(object):
 
-    def __init__(self, steps, tempo):
+    def __init__(self, console, steps, tempo, controllers_config=None):
+        self.console = console
         self.steps = steps
         self.tempo = tempo
-        self.inputs =  Inputs()
+        self.inputs = Inputs()
         self.outputs = Outputs()
         self.synths = []
         self.current_synth_index = None
-        self.console = Console()
         self.events = SequencerEvents()
-        self.scheduler = Scheduler(self, steps, tempo)
+        self.scheduler = Scheduler(self, console, steps, tempo)
         self.paused = False
         self._next_step_on_note = False
         self._saved_note = None  # The note currently played by the user
         self.protected = False
 
-    def add_input_controllers(self, *controllers):
-        self.inputs.add_controllers(*controllers)
-
-    def add_output_controllers(self, *controllers):
-        self.outputs.add_controllers(*controllers)
+        if controllers_config is not None:
+            controllers_config.init_controllers(self)
+            self.inputs.add_controllers(*controllers_config.inputs)
+            self.outputs.add_controllers(*controllers_config.outputs)
+            self.set_synths(*controllers_config.synths)
 
     def set_synths(self, *controllers):
         self.synths = controllers
@@ -49,7 +47,9 @@ class Sequencer(object):
             self.current_synth_index = 0
 
     def output(self, controller, *messages):
-        assert isinstance(controller, BaseController), '``output`` first argument must be a controller'
+        assert isinstance(controller, BaseController), \
+            '``output`` first argument must be a controller (found %s)' % \
+            (controller.__class__.__name__ if controller else 'None')
         self.outputs.send(controller, *messages)
 
     def on(self, event, controller, fun):
@@ -75,11 +75,12 @@ class Sequencer(object):
 
     @next_step_on_note.setter
     def next_step_on_note(self, on):
-        self.print_str('NEXT STEP ON  NOTE %s' % ('on' if on else 'off'))
+        self.big_print('NEXT STEP ON  NOTE %s' % ('on' if on else 'off'))
         self._next_step_on_note = on
 
-    def print_str(self, msg):
-        self.console.print_str(msg)
+    def big_print(self, msg):
+        gevent.idle()
+        self.console.big_print(msg)
 
     def start(self):
         try:
@@ -115,21 +116,21 @@ class Sequencer(object):
     def _pause(self):
         self.paused = True
         self.scheduler.pause()
-        self.print_str('PAUSE')
+        self.big_print('PAUSE')
         self.print_step()
         # Call listeners
         self.set_event(SequencerEvents.PAUSE, self.steps)
 
     def resume(self):
         if self.paused:
-            self.print_str('RESUME')
+            self.big_print('RESUME')
             self.paused = False
             self.scheduler.resume()
             # Call listeners
             self.set_event(SequencerEvents.RESUME, self.steps.current_step)
 
     def print_step(self, pos=None):
-        self.print_str(self.steps.get_current_step_str(pos))
+        self.big_print(self.steps.get_current_step_str(pos))
 
     def begin_step(self, step):
         if not self.paused:
@@ -138,7 +139,7 @@ class Sequencer(object):
     def end_step(self, step):
         # If saved note was played for 'too long', force its end
         if self._saved_note and \
-            self._saved_note.duration > self.tempo.get_step_duration(self.steps.steps_per_beat):
+           self._saved_note.duration > self.tempo.get_step_duration(self.steps.steps_per_beat):
             self.note_release(True)
         if not self.paused:
             self.set_event(SequencerEvents.STEP_END, step)
@@ -200,7 +201,7 @@ class Sequencer(object):
     def set_step_pitch(self, value, pos=None):
         self.steps.set_step_pitch(value, pos)
         step = self.steps.get_step(pos)
-        self.print_str('%d PITCH: %s' % (step.pos + 1, value))
+        self.big_print('%d PITCH: %s' % (step.pos + 1, value))
         if self.paused:
             # Play note
             self.scheduler.schedule_note(step)
@@ -208,7 +209,7 @@ class Sequencer(object):
     def set_step_duration(self, value, pos=None):
         self.steps.set_step_duration(value, pos)
         step = self.steps.get_step(pos)
-        self.print_str('%d DUR : %.2f' % (step.pos + 1, value))
+        self.big_print('%d DUR : %.2f' % (step.pos + 1, value))
         if self.paused:
             # Play note
             self.scheduler.schedule_note(step)
@@ -216,7 +217,7 @@ class Sequencer(object):
     def set_step_velocity(self, value, pos=None):
         self.steps.set_step_velocity(value, pos)
         step = self.steps.get_step(pos)
-        self.print_str('%d VEL : %s' % (step.pos + 1, value))
+        self.big_print('%d VEL : %s' % (step.pos + 1, value))
         if self.paused:
             # Play note
             self.scheduler.schedule_note(step)
@@ -224,14 +225,14 @@ class Sequencer(object):
     def set_step_cc(self, control, value, pos=None):
         self.steps.set_step_cc(control, value)
         step = self.steps.get_step(pos)
-        self.print_str('%d CC %s : %s' % (step.pos + 1, control, value))
+        self.big_print('%d CC %s : %s' % (step.pos + 1, control, value))
         if self.paused:
             # Play note
             self.scheduler.schedule_note(step)
 
     def set_tempo(self, value):
         self.tempo.bpm = value
-        self.print_str('BPM: %s' % value)
+        self.big_print('BPM: %s' % value)
 
     def toggle_step(self, step_index):
         if step_index < self.step_count:  # Some controllers can send toggles on steps outside our step count
@@ -245,22 +246,22 @@ class Sequencer(object):
                     self.scheduler.schedule_note(step)
                     # Force status refresh for listeners
                     self.set_event(SequencerEvents.PAUSE, self.steps)
-            self.print_str('%d : %s' % (step.pos + 1, 'on' if step.on else 'off'))
+            self.big_print('%d : %s' % (step.pos + 1, 'on' if step.on else 'off'))
             return step
 
     def increase_step_count(self):
         old_step_count = self.steps.step_count
         self.steps.increase_step_count()
-        self.print_str('%d -> %d STEPS' % (old_step_count, self.steps.step_count))
+        self.big_print('%d -> %d STEPS' % (old_step_count, self.steps.step_count))
         if self.paused:
             # Force status refresh for listeners
             self.set_event(SequencerEvents.PAUSE, self.steps)
 
     def toggle_protect(self):
         self.protected = not self.protected
-        self.print_str('PROTECT: ' + ('ON' if self.protected else 'OFF'))
+        self.big_print('PROTECT: ' + ('ON' if self.protected else 'OFF'))
 
     def next_synth(self):
         if len(self.synths) > 1:
             self.current_synth_index = (self.current_synth_index + 1) % len(self.synths)
-            self.print_str('SYNTH: %s' % (self.synths[self.current_synth_index]))
+            self.big_print('SYNTH: %s' % (self.synths[self.current_synth_index]))

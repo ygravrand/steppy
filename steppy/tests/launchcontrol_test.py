@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -12,12 +12,13 @@ from steppy.sequencer import Sequencer
 from steppy.tempo import Tempo
 from steppy.controllers.launchcontrol import LaunchControl
 
+from .console import Console
+
 
 def get_launchcontrol():
-    steps = Steps()
-    tempo = Tempo()
-    seq = Sequencer(steps, tempo)
-    lc = LaunchControl(seq)
+    console = Console()
+    seq = Sequencer(console, Steps(console), Tempo())
+    lc = LaunchControl(seq, console)
     return lc
 
 

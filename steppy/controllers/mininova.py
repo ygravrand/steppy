@@ -1,23 +1,21 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
-from mido import Message
-
 from ..note import Note
 from ..rules import RulesChain, Rule
-from ..base_controller import BaseController
 from ..helpers import msb_lsb_output, msb_lsb_rules_chain
 from ..sequencer_events import SequencerEvents
+from .base_controller import BaseController
 
 
 class MiniNova(BaseController):
 
-    def __init__(self, sequencer, port_name='MiniNova'):
-        super(MiniNova, self).__init__(sequencer, port_name)
+    def __init__(self, sequencer, console, port_name='MiniNova'):
+        super(MiniNova, self).__init__(sequencer, console, port_name)
 
         self.sequencer.on(SequencerEvents.STEP_BEGIN, self, self.on_step_begin)
         self.sequencer.on(SequencerEvents.STEP_END, self, self.on_step_end)
@@ -30,8 +28,8 @@ class MiniNova(BaseController):
         # https://d19ulaff0trnck.cloudfront.net/sites/default/files/novation/downloads/9558/mininova-cc-nprn-chart_0.pdf
         self.register('TEMPO', self.on_tempo_change, msb_lsb_rules_chain(2, '*', 63, '*'))
         for i in range(0, 8):
-            self.register('ARPEG #%d on' % i, lambda msgs, rules, i=i: self.on_arpeg(i, True), msb_lsb_rules_chain(60, msb_value=127, lsb=32+i))
-            self.register('ARPEG #%d off' % i, lambda msgs, rules, i=i: self.on_arpeg(i, False), msb_lsb_rules_chain(60, msb_value=0, lsb=32+i))
+            self.register('ARPEG #%d on' % i, lambda msgs, rules, i=i: self.on_arpeg(i, True), msb_lsb_rules_chain(60, msb_value=127, lsb=32 + i))
+            self.register('ARPEG #%d off' % i, lambda msgs, rules, i=i: self.on_arpeg(i, False), msb_lsb_rules_chain(60, msb_value=0, lsb=32 + i))
 
         # The problem with 'LATCH' button is that it also modifies the synth's output...
         """
@@ -66,10 +64,10 @@ class MiniNova(BaseController):
         self.sequencer.note_release()
 
     def on_pad_pressed(self, i):
-        print('>>>>>>>>>>> PAD %d PRESSED' % i)
+        self.console.print_('>>>>>>>>>>> PAD %d PRESSED' % i)
 
     def on_arpeg(self, i, on):
-        print('>>>>>>>>>>> ARPEG %d %s' % (i, 'on' if on else 'off'))
+        self.console.print_('>>>>>>>>>>> ARPEG %d %s' % (i, 'on' if on else 'off'))
         self.sequencer.toggle_step(i)
 
     def on_tempo_change(self, msgs, rules):

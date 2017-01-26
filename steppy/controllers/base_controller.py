@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     StepPy
-    :copyright: (c) 2016 by Yann Gravrand.
+    :copyright: (c) 2016-2017 by Yann Gravrand.
     :license: BSD, see LICENSE for more details.
 """
 
@@ -10,8 +10,9 @@ from collections import OrderedDict
 
 class BaseController(object):
 
-    def __init__(self, sequencer, port_name=''):
+    def __init__(self, sequencer, console, port_name=''):
         self.sequencer = sequencer
+        self.console = console
         self.port_name = port_name
         self.rules_chains = OrderedDict()
 
@@ -27,11 +28,11 @@ class BaseController(object):
         self.rules_chains[name] = (func, rules_chain)
 
     def handle_message(self, msg):
-        print('Msg received: %s' % msg)
+        self.console.print_('Msg received: %s' % msg)
         for name, (func, rules_chain) in self.rules_chains.items():
             match, partial_match, res = rules_chain.run(func, msg)
             if match:
-                print('%s : %s' % (name, res))
+                self.console.print_('%s : %s' % (name, res))
 
     def get_rules_chain_by_name(self, name):
         if name in self.rules_chains:
