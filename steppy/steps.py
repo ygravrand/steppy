@@ -61,9 +61,10 @@ class Step(object):
         self.note.note = value
 
     def set_duration(self, value):
-        if self.note is None:
-            self.note = Note()
-        self.note.duration = value
+        if value > 0:
+            if self.note is None:
+                self.note = Note()
+            self.note.duration = value
 
     def set_velocity(self, value):
         if self.note is None:
