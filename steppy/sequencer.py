@@ -20,7 +20,8 @@ from .sequencer_events import SequencerEvents
 
 class Sequencer(object):
 
-    def __init__(self, console, steps, tempo, controllers_config=None):
+    def __init__(self, server, console, steps, tempo, controllers_config=None):
+        self.server = server
         self.console = console
         self.steps = steps
         self.tempo = tempo
@@ -84,6 +85,8 @@ class Sequencer(object):
 
     def start(self):
         try:
+            if self.server:
+                self.server.start()
             self.console.start()
             print('Activating inputs')
             self.inputs.activate_inputs()

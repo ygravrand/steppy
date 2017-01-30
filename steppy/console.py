@@ -5,9 +5,9 @@
     :license: BSD, see LICENSE for more details.
 """
 import pyfiglet
-import queue
 
 from multiprocessing import Process, Queue
+from six.moves import queue
 
 
 class Console(object):
@@ -16,7 +16,7 @@ class Console(object):
         'console': {
             'font': 'string(default="basic")',      # pyfiglet font
             'queue_size': 'integer(default=10)',    # discard messages when more than ``queue_size`` are left to print
-            'terse': 'boolean(default=False)'       # if True, print BIG messages only
+            'terse': 'boolean(default=True)'       # if True, print BIG messages only
         }
     }
 

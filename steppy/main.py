@@ -13,23 +13,30 @@ from steppy.controllers_config import ControllersConfig
 from steppy.list_interfaces import list_interfaces
 from steppy.steps import Steps
 from steppy.sequencer import Sequencer
+from steppy.server import Server
 from steppy.tempo import Tempo
 
 
-def main(fpath=None, configfile=None):
+def main(fpath=None, server=False, configfile=None):
     tempo = Tempo()
 
     configurator = Configurator(configfile)
+    configurator.add_configurable(Server)
     configurator.add_configurable(Console)
     configurator.add_configurable(ControllersConfig)
     config = configurator.configure()
 
-    console = Console(config)
+    if server:
+        server = Server(config)
+        console = server.console or Console(config)
+    else:
+        server = None
+        console = Console(config)
     steps = Steps(console)
     if fpath is not None:
         steps_persister.load(steps, fpath)
 
-    seq = Sequencer(console, steps, tempo, ControllersConfig(config))
+    seq = Sequencer(server, console, steps, tempo, ControllersConfig(config))
 
     seq.start()
 
@@ -38,12 +45,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser('Step sequencer written in Python')
     parser.add_argument('command', nargs='?', default='go', help='list: list interfaces; load: load json dump')
     parser.add_argument('fpath', nargs='?', help='file path')
-    parser.add_argument('--config', help='Configuration file')
+    parser.add_argument('-c', '--config', help='Configuration file')
+    parser.add_argument('-s', '--server', action='store_true', help='Launch server (needs redis)')
     args = parser.parse_args()
     if args.command == 'list':
         print(list_interfaces())
     elif args.command == 'load':
         fpath = args.fpath
-        main(fpath, configfile=args.config)
+        main(fpath, server=args.server, configfile=args.config)
     else:
-        main(configfile=args.config)
+        main(server=args.server, configfile=args.config)

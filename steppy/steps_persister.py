@@ -37,4 +37,4 @@ def save(steps, fpath=None):
                 dict_['channel'] = step.note.channel
             res.append(dict_)
         f.write(json.dumps(res))
-    print('Saved to', fpath)
+    print('Saved to %s' % fpath)
