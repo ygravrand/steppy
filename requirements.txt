@@ -1,7 +1,13 @@
+# Main dependencies
 configobj
 mido
+gevent==1.1b4
+pyfiglet
+redis
+flask
+flask-sockets
+
+# Test dependencies
 pytest
 tox
 flake8
-gevent
-pyfiglet
