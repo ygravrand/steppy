@@ -43,7 +43,12 @@ class MiniNova(BaseController):
                       msb_lsb_rules_chain(0, 51, 122)
                      )"""
 
-        self.register('FILTER', self.on_cc, RulesChain(Rule(type_='control_change', control='74')))
+        self.register_print(1, 'MOD')
+        self.register_print(74, 'FILTER')
+        self.register_print(22, 'OSC1 VSYNC')
+        self.register_print(24, 'OSC1 DENS')
+        self.register_print(33, 'OSC2 VSYNC')
+        self.register_print(35, 'OSC2 DENS')
 
     def on_step_begin(self, step):
         self.sequencer.output(self, *msb_lsb_output(60, 0, 32 + step.pos))
@@ -63,9 +68,6 @@ class MiniNova(BaseController):
     def on_note_off(self, msgs, rules):
         self.sequencer.note_release()
 
-    def on_pad_pressed(self, i):
-        self.console.print_('>>>>>>>>>>> PAD %d PRESSED' % i)
-
     def on_arpeg(self, i, on):
         self.console.print_('>>>>>>>>>>> ARPEG %d %s' % (i, 'on' if on else 'off'))
         self.sequencer.toggle_step(i)
@@ -75,5 +77,8 @@ class MiniNova(BaseController):
         bpm = msb * 128 + lsb
         self.sequencer.set_tempo(bpm)
 
-    def on_cc(self, msgs, rules):
-        self.sequencer.set_step_cc(msgs[0].control, msgs[0].value)
+    def register_print(self, cc, label):
+        # Utility function to register callbacks which only print the given label and the CC value
+        def print_(msgs, rules):
+            self.console.big_print('%s: %s' % (label, msgs[0].value))
+        self.register(label, print_, RulesChain(Rule(type_='control_change', control=cc)))
