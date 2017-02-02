@@ -1,0 +1,8 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: black;
+    color: rgba(170, 252, 252, 0.9);
+}
+.status {
+    font-size: 10rem;
+}

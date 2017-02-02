@@ -17,7 +17,7 @@ from .console import Console
 
 def get_mininova():
     console = Console()
-    seq = Sequencer(console, Steps(console), Tempo())
+    seq = Sequencer(None, console, Steps(console), Tempo())
     mini = MiniNova(seq, console)
     return mini
 

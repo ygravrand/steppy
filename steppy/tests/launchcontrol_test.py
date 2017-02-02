@@ -17,7 +17,7 @@ from .console import Console
 
 def get_launchcontrol():
     console = Console()
-    seq = Sequencer(console, Steps(console), Tempo())
+    seq = Sequencer(None, console, Steps(console), Tempo())
     lc = LaunchControl(seq, console)
     return lc
 

@@ -139,7 +139,7 @@ class LaunchControl(BaseController):
         self.sequencer.set_step_pitch(val, i)
 
     def handle_rotaries_second_row(self, msgs, i):
-        val = msgs[0].value / 127
+        val = msgs[0].value / 127.0
         self.sequencer.set_step_duration(val, i)
 
     def handle_pad_press(self, msgs, i):
