@@ -66,16 +66,16 @@ Troubleshooting
     port_name = Launch Control MIDI 1
 
 
-On the Raspberry Pi
-===================
+On the Raspberry Pi / C.H.I.P
+=============================
 
-- Follow instructions at https://www.raspberrypi.org/downloads/raspbian to install Raspbian
-- Install ``git`` and Steppy dependencies: ``sudo apt-get install -y git python3 python3-virtualenv libpython3-dev libportmidi-dev build-essential``
+- Install ``git`` and Steppy dependencies: ``sudo apt-get install -y git python virtualenv libpython-dev libportmidi-dev build-essential redis-server``
 - Clone this repository: ``git clone https://github.com/ygravrand/steppy; cd steppy``
-- Create a ``virtualenv``: ``python3 -m virtualenv --python=python3 .venv; source .venv/bin/activate``
+- Create a ``virtualenv``: ``virtualenv .venv; source .venv/bin/activate``
 - Run ``pip install -e .``
 - Connect a supported controller on an USB port
-- Run ``python -m steppy.main --config=conf/steppy-rpi.conf`` or ``python -m steppy.main --config=conf/steppy-rpi.conf load examples/mozart.json``
+- Run ``python -m steppy.main --config=conf/steppy-rpi.conf`` (you can use ``-s`` option to launch a
+web server).
 
 
 Roadmap
