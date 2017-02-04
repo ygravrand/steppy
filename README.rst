@@ -41,7 +41,7 @@ Installation and usage
 ======================
 To install the package and run StepPy:
 
-- Install ``python``, ``virtualenv`` and make sure you have a C compiler, portmidi and python headers: e.g. ``sudo apt-get install python3 python3-virtualenv libpython3-dev libportmidi-dev build-essential`` on Debian/Ubuntu
+- Install ``python``, ``virtualenv`` and make sure you have a C compiler, portmidi and python headers: e.g. ``sudo apt-get install -y git python3 python3-virtualenv libpython3-dev libportmidi-dev build-essential`` on Debian/Ubuntu
 - Clone this repository and ``cd`` into it
 - Create a ``virtualenv``: ``virtualenv --python=python3 .venv; source .venv/bin/activate``
 - Run ``pip install -e .`` or ``python setup.py develop``
@@ -52,6 +52,22 @@ To run tests:
 
 - Run ``pip install -e .[test]``
 - Run ``py.test``
+
+
+Integrated web server (experimental)
+====================================
+
+StepPy ships with an integrated ``gevent``-based web server with real time updates via Websockets.
+
+To use this server (only works with python 2 for now):
+
+- Install ``redis`` and ``python2`` along with other dependencies: e.g. ``sudo apt-get install -y git python virtualenv libpython-dev libportmidi-dev build-essential redis-server``
+- Clone this repository: ``git clone https://github.com/ygravrand/steppy; cd steppy``
+- Create a ``virtualenv``: ``virtualenv .venv2; source .venv2/bin/activate``
+- Run ``pip install -e .``
+- Connect a supported controller on an USB port
+- Launch ``redis`` if not already launched: ``redis-server --bind 127.0.0.1 --daemonize yes``
+- Run ``python -m steppy.main -s`` or ``python -m steppy.main -s load examples/mozart.json``
 
 
 Troubleshooting
@@ -65,17 +81,16 @@ Troubleshooting
     type = launchcontrol
     port_name = Launch Control MIDI 1
 
+- On Mac OS X, problems have been reported with system upgrades, resulting in errors like `this one <https://github.com/olemb/mido/issues/44>`_.
+  A solution could be to modify ``<venv>/lib/python2.7/site-packages/mido/backends/portmidi_init.py`` to specify the absolute location of the library::
 
-On the Raspberry Pi / C.H.I.P
-=============================
 
-- Install ``git`` and Steppy dependencies: ``sudo apt-get install -y git python virtualenv libpython-dev libportmidi-dev build-essential redis-server``
-- Clone this repository: ``git clone https://github.com/ygravrand/steppy; cd steppy``
-- Create a ``virtualenv``: ``virtualenv .venv; source .venv/bin/activate``
-- Run ``pip install -e .``
-- Connect a supported controller on an USB port
-- Run ``python -m steppy.main --config=conf/steppy-rpi.conf`` (you can use ``-s`` option to launch a
-web server).
+    if sys.platform == 'darwin':
+        dll_name = ctypes.util.find_library('/usr/local/lib/libportmidi.dylib')
+
+  See `this discussion <http://stackoverflow.com/questions/32905322/oserror-dlopenlibsystem-dylib-6-image-not-found>`_ for details.
+
+
 
 
 Roadmap
