@@ -72,6 +72,7 @@ To use this server (only works with python 2 for now):
 
 Troubleshooting
 ===============
+
 - Run ``python -m steppy.main list``, this will list the detected inputs and outputs
 - Edit ``conf/steppy.conf`` and add the corresponding names to a ``port_name`` parameter.
 
@@ -89,7 +90,6 @@ Troubleshooting
         dll_name = ctypes.util.find_library('/usr/local/lib/libportmidi.dylib')
 
   See `this discussion <http://stackoverflow.com/questions/32905322/oserror-dlopenlibsystem-dylib-6-image-not-found>`_ for details.
-
 
 
 
