@@ -25,7 +25,7 @@ Genesis
 This project was demonstrated @ Pycon-Fr 2016.
 
 The slides are available `here
-<https://speakerdeck.com/ygravrand/informatique-musicale-creer-un-sequenceur-pas-a-pas-avec-python>`_ (soon on this repository).
+<https://speakerdeck.com/ygravrand/build-a-step-sequencer-using-python-fosdem-17>`_ (soon on this repository).
 
 First demo:
 
