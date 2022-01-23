@@ -10,7 +10,7 @@ setup(
     name='steppy',
     version='0.1.0',
     packages=find_packages(),
-    install_requires=['configobj', 'mido', 'gevent==1.1b4', 'pyfiglet', 'redis', 'flask', 'flask-sockets', 'karellen-geventws', 'six'],
+    install_requires=['configobj', 'mido', 'gevent', 'pyfiglet', 'redis', 'flask', 'flask-sockets', 'gevent-websocket', 'six'],
     extras_require={
         'test': ['pytest', 'tox']
     },

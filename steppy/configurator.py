@@ -8,7 +8,7 @@ import os
 import pkg_resources
 
 from configobj import ConfigObj
-from validate import Validator
+from configobj.validate import Validator
 
 
 class Configurator(object):
