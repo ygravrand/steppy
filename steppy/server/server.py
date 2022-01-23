@@ -10,7 +10,7 @@ import redis
 
 from flask import Flask, render_template
 from flask_sockets import Sockets
-from gevent.wsgi import WSGIServer
+from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler
 
 

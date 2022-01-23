@@ -1,11 +1,12 @@
 # Main dependencies
-configobj
+git+https://github.com/DiffSK/configobj
 mido
-gevent==1.1b4
+gevent
 pyfiglet
 redis
 flask
 flask-sockets
+gevent-websocket
 
 # Test dependencies
 pytest
